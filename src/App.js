@@ -1,11 +1,11 @@
 import React,{Component} from 'react';
 import "weather-icons/css/weather-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css"
-import Form from './app_component/form.component'
-import './App.css';
-import Weather from './app_component/weather.component';
-//api.openweathermap.org/data/2.5/weather?q=Mumbai
-const api_key="37c70b216c90e0b74b3dd8a5bd96c2bd";
+import {Form} from './app_component/form.component.js'
+import {Weather} from './app_component/weather.component.js';
+import {DayCard} from './app_component/Forecast'
+import api_key from './apikey'
+import {Footer} from'./app_component/Footer'
 
 class App extends Component{
   constructor()
@@ -20,7 +20,10 @@ class App extends Component{
       temp_max:undefined,
       temp_min:undefined,
       desc:"",
-      error:false
+      error:false,
+      backgroundImage:"",
+      dailyData:[],
+      fclick:false
     };
 
     
@@ -70,8 +73,17 @@ class App extends Component{
     
     if(city && country){
       
-    const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${api_key}`);
+    const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${api_key.api_key}`);
     const response = await api_call.json();
+    const forecast_api = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&appid=${api_key.api_key}`);
+    const forecast_res = await forecast_api.json()
+    
+
+    if(response.cod!==200)
+    {
+      this.setState({error:true})
+    }
+    else{
     this.setState(
       {
         city:`${response.name},${response.sys.country}`,
@@ -82,13 +94,29 @@ class App extends Component{
         error:false
       }
     )
-      
+    const dailyData = forecast_res.list.filter(reading => reading.dt_txt.includes("12:00:00"))
+    this.setState({dailyData: dailyData})
+
+      if(this.calcCelsius(response.main.temp)>16)
+        this.setState({backgroundImage:"linear-gradient(to right, #fc4a1a, #f7b733)"})
+      else
+        this.setState({backgroundImage:"linear-gradient(to right, #B2FEFA, #0ED2F7)"})
     this.get_WeatherIcon(this.weathericon,response.weather[0].id);
     }
+  }
     else{
       this.setState({error:true});
     }
   }
+
+  Clicked=()=>{
+    this.setState({fclick:!this.state.fclick})
+  }
+  formatDayCards=()=>{
+    if(this.state.fclick==true)
+    return this.state.dailyData.map((reading, index) => <DayCard reading={reading} key={index} />)
+
+    }
   
    calcCelsius(temp) {
     temp=Math.floor(temp-273.15);
@@ -97,10 +125,11 @@ class App extends Component{
 
 
   render(){
-    return (  
-   
-        <div className="App">
-          <Form loadweather={this.getWeather} error={this.state.error}/>
+    return ( 
+       <>
+        <div className="App" style={{backgroundImage:this.state.backgroundImage}}>
+        <Form loadweather={this.getWeather} clicked={this.Clicked}
+        error={this.state.error} />
         <Weather city={this.state.city} 
         country={this.state.country}
         celsius={this.state.celsius}
@@ -108,7 +137,15 @@ class App extends Component{
         temp_min={this.state.temp_min}
         desc={this.state.desc}
         weathericon={this.state.icon}/>
+        <div className="row justify-content-center">
+        {this.formatDayCards()}
         </div>
+     
+        <Footer />
+      
+        </div>
+       
+      </>     
     );
   }
 }
