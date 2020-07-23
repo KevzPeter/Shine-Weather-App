@@ -8,7 +8,7 @@ export const Weather = (props)=>{
            <h5 className="py-4">
                <i className={`wi ${props.weathericon} display-1`}></i>
            </h5>
-            {props.celsius?(<h1 className="py-2">{props.celsius}&deg;</h1>):null}
+            {props.celsius?(<h1 className="py-2">{props.celsius}&deg;C</h1>):null}
            {minmax(props.temp_min,props.temp_max)}
            <h4 className="py-3">{props.desc}</h4>
        </div>
@@ -19,10 +19,10 @@ export const Weather = (props)=>{
 function minmax(min,max){
         if(min&&max){
             return(
-                <h3>
-                    <span className="px-4">{min}&deg;</span>
-                    <span className="px-4">{max}&deg;</span>
-                </h3>
+                <h5>
+                    <span className="px-4">{max}&deg;C</span>
+                    <span className="px-4">{min}&deg;C</span>
+                </h5>
             );
         }
    

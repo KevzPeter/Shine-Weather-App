@@ -6,16 +6,16 @@ export const Form = props=>{
             <div>{props.error?error():null}</div>
             <form onSubmit={props.loadweather}>
             <div className="row justify-content-center" >
-                <div className="col-md-3 offset-md-1">
+                <div className=" col-md-3 py-2 offset-md-1">
                     <input type="text" className="form-control"name="city" autoComplete="off" placeholder="City"/>
                 </div>
-                <div className="col-md-3">
+                <div className="col-md-3 py-2">
                     <input type="text" className="form-control"name="country" autoComplete="off"placeholder="Country"/>
                 </div>
-                <div className="col-md-2 pt-2 offset-md-1 text-center">
-                    <button className="btn btn-warning">Get Weather</button>
+                <div className="col-md-2 py-2 offset-md-1 text-center">
+                    <button className="btn btn-warning" onClick={props.gotweather}>Get Weather</button>
                 </div>
-                <div className="col-md-2 pt-2 text-center">
+                <div className="col-md-2 py-2 text-center">
                     <button className="btn btn-warning" onClick={props.clicked}>5 day Forecast</button>
                 </div>
             </div>

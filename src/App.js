@@ -4,8 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import {Form} from './app_component/form.component.js'
 import {Weather} from './app_component/weather.component.js';
 import {DayCard} from './app_component/Forecast'
+import {Logo} from './app_component/logo'
 import api_key from './apikey'
 import {Footer} from'./app_component/Footer'
+import {DayView} from './app_component/DayView'
 
 class App extends Component{
   constructor()
@@ -23,7 +25,10 @@ class App extends Component{
       error:false,
       backgroundImage:"",
       dailyData:[],
-      fclick:false
+      day1Data:[],
+      chosenDay:undefined,
+      fclick:false,
+      gclick:false
     };
 
     
@@ -95,8 +100,14 @@ class App extends Component{
       }
     )
     const dailyData = forecast_res.list.filter(reading => reading.dt_txt.includes("12:00:00"))
+    const day1Data = forecast_res.list.slice(0,8).map((reading)=>reading)
+    this.setState({day1Data:day1Data})
     this.setState({dailyData: dailyData})
-
+    /*navigator.geolocation.getCurrentPosition(function(position) {
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+    });
+    */
       if(this.calcCelsius(response.main.temp)>16)
         this.setState({backgroundImage:"linear-gradient(to right, #fc4a1a, #f7b733)"})
       else
@@ -108,16 +119,30 @@ class App extends Component{
       this.setState({error:true});
     }
   }
+  formatDayView(){
 
+    return <DayView reading={JSON.stringify(this.state.day1Data)}/>
+  }
   Clicked=()=>{
     this.setState({fclick:!this.state.fclick})
   }
+  GotWeather=()=>{
+    this.setState({gclick:true})
+    
+  }
+  showlogo=()=>{
+    if(this.state.gclick===false)
+    return <Logo />
+  }
   formatDayCards=()=>{
-    if(this.state.fclick==true)
-    return this.state.dailyData.map((reading, index) => <DayCard reading={reading} key={index} />)
-
+    if(this.state.fclick===true)
+    return (
+      this.state.dailyData.map((reading, index) => <DayCard reading={reading} key={index} dayview={this.Clicked}/>)
+      )
     }
-  
+  ChosenDay(day){
+    console.log(day)
+  }
    calcCelsius(temp) {
     temp=Math.floor(temp-273.15);
     return temp;
@@ -129,22 +154,21 @@ class App extends Component{
        <>
         <div className="App" style={{backgroundImage:this.state.backgroundImage}}>
         <Form loadweather={this.getWeather} clicked={this.Clicked}
-        error={this.state.error} />
+        error={this.state.error} gotweather={this.GotWeather}/>
         <Weather city={this.state.city} 
         country={this.state.country}
         celsius={this.state.celsius}
         temp_max={this.state.temp_max}
         temp_min={this.state.temp_min}
-        desc={this.state.desc}
+        desc={this.state.desc.toUpperCase()}
         weathericon={this.state.icon}/>
+        {this.showlogo()}
         <div className="row justify-content-center">
         {this.formatDayCards()}
         </div>
-     
-        <Footer />
       
         </div>
-       
+        <Footer style={{backgroundImage:this.state.backgroundImage}} />
       </>     
     );
   }
