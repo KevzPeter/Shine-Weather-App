@@ -7,7 +7,6 @@ import {DayCard} from './app_component/Forecast'
 import {Logo} from './app_component/logo'
 import api_key from './apikey'
 import {Footer} from'./app_component/Footer'
-import {DayView} from './app_component/DayView'
 
 class App extends Component{
   constructor()
@@ -25,10 +24,12 @@ class App extends Component{
       error:false,
       backgroundImage:"",
       dailyData:[],
-      day1Data:[],
-      chosenDay:undefined,
+      maxtemp:[],
+      mintemp:[],
+      day1Data:null,
       fclick:false,
-      gclick:false
+      gclick:false,
+      loaded:false,
     };
 
     
@@ -75,14 +76,13 @@ class App extends Component{
     e.preventDefault();
     const city=e.target.elements.city.value;
     const country=e.target.elements.country.value;
-    
+    console.log("called geweather")
     if(city && country){
       
     const api_call = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${api_key.api_key}`);
     const response = await api_call.json();
     const forecast_api = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city},${country}&appid=${api_key.api_key}`);
     const forecast_res = await forecast_api.json()
-    
 
     if(response.cod!==200)
     {
@@ -99,15 +99,37 @@ class App extends Component{
         error:false
       }
     )
+   // this.getHourly()
+   
+   let arr=[5]
+   let maxtemp=[5]
+   let mintemp=[5]
+   arr[0]=forecast_res.list.slice(0,8)
+   arr[1]=forecast_res.list.slice(8,16)
+   arr[2]=forecast_res.list.slice(16,24)
+   arr[3]=forecast_res.list.slice(24,32)
+   arr[4]=forecast_res.list.slice(32,40)
+   console.log(arr)
+   for(var i=0;i<5;i++)
+   {
+      maxtemp[i]=arr[i][0].main.temp_max
+      mintemp[i]=arr[i][0].main.temp_min
+     for(var j=0;j<8;j++)
+     {
+        if(arr[i][j].main.temp_max>=maxtemp[i]){maxtemp[i]=arr[i][j].main.temp_max}
+        if(arr[i][j].main.temp_min<=mintemp[i]){mintemp[i]=arr[i][j].main.temp_min}
+        
+     }
+   }
+   console.log(maxtemp)
+   console.log(mintemp)
+   this.setState({maxtemp:maxtemp,mintemp:mintemp})
     const dailyData = forecast_res.list.filter(reading => reading.dt_txt.includes("12:00:00"))
-    const day1Data = forecast_res.list.slice(0,8).map((reading)=>reading)
-    this.setState({day1Data:day1Data})
-    this.setState({dailyData: dailyData})
-    /*navigator.geolocation.getCurrentPosition(function(position) {
-      console.log("Latitude is :", position.coords.latitude);
-      console.log("Longitude is :", position.coords.longitude);
-    });
-    */
+    //console.log(dailyData)
+    //const day1Data = forecast_res.list.slice(0,8).map((reading)=>reading)
+    this.setState({dailyData: dailyData })
+
+    //changing background theme according to color
       if(this.calcCelsius(response.main.temp)>16)
         this.setState({backgroundImage:"linear-gradient(to right, #fc4a1a, #f7b733)"})
       else
@@ -119,42 +141,60 @@ class App extends Component{
       this.setState({error:true});
     }
   }
-  formatDayView(){
-
-    return <DayView reading={JSON.stringify(this.state.day1Data)}/>
-  }
-  Clicked=()=>{
-    this.setState({fclick:!this.state.fclick})
-  }
-  GotWeather=()=>{
-    this.setState({gclick:true})
-    
-  }
-  showlogo=()=>{
-    if(this.state.gclick===false)
-    return <Logo />
-  }
-  formatDayCards=()=>{
-    if(this.state.fclick===true)
-    return (
-      this.state.dailyData.map((reading, index) => <DayCard reading={reading} key={index} dayview={this.Clicked}/>)
-      )
+  
+    Clicked=()=>{
+      this.setState({fclick:!this.state.fclick})
     }
-  ChosenDay(day){
-    console.log(day)
-  }
+    GotWeather=()=>{
+      this.setState({gclick:true})
+    }
+    showlogo=()=>{
+      if(this.state.gclick===false)
+      return <Logo />
+    }
+    
+    formatDayCards=()=>{
+      if(this.state.fclick===true)
+      return (
+        this.state.dailyData.map((reading, index) => <DayCard reading={reading} 
+        key={index} dayview={this.Clicked} maxtemp={this.state.maxtemp[index]} mintemp={this.state.mintemp[index]}/>)
+        )
+      }
+      /*
+      getHourly=()=>{
+
+        navigator.geolocation.getCurrentPosition( async(position)=> {
+          const lat=position.coords.latitude
+          const long=position.coords.longitude
+          if(lat&&long){
+            console.log('hey')
+          const hourly_api=await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&exclude=current,minutely,daily&appid=${api_key.api_key}`)
+          const hourly_res=await hourly_api.json()
+          const hourly_data=hourly_res.hourly.slice(0,24).map((reading)=>reading)
+          this.setState({day1Data:JSON.stringify(hourly_data)})
+          }
+          else{
+            this.setState({error:true})
+          }
+        });
+        
+        }
+        */
+            
    calcCelsius(temp) {
     temp=Math.floor(temp-273.15);
     return temp;
-  }
+    }
 
-
+    componentDidMount(){
+          this.setState({loaded:true})
+    }
   render(){
     return ( 
        <>
         <div className="App" style={{backgroundImage:this.state.backgroundImage}}>
         <Form loadweather={this.getWeather} clicked={this.Clicked}
-        error={this.state.error} gotweather={this.GotWeather}/>
+        error={this.state.error} gotweather={this.GotWeather} />
         <Weather city={this.state.city} 
         country={this.state.country}
         celsius={this.state.celsius}
@@ -166,10 +206,9 @@ class App extends Component{
         <div className="row justify-content-center">
         {this.formatDayCards()}
         </div>
-      
         </div>
         <Footer style={{backgroundImage:this.state.backgroundImage}} />
-      </>     
+      </> 
     );
   }
 }

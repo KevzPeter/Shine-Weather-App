@@ -1,9 +1,11 @@
 import React from 'react'
-import parasol from '../svg/parasol.svg'
+import sunny from '../svg/sunny.svg'
 export const Logo=()=>{
     return (
         <div className="text-center">
-            <img src={parasol} alt="logo" className="svg"></img>
+            <h1><img height="200px" width="auto" 
+                src={sunny} alt="logo" className="sun">
+                </img> <span className="title">Shine</span></h1>
         </div>
     )
 }

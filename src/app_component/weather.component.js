@@ -20,8 +20,8 @@ function minmax(min,max){
         if(min&&max){
             return(
                 <h5>
-                    <span className="px-4">{max}&deg;C</span>
-                    <span className="px-4">{min}&deg;C</span>
+                    <span className="px-4"><i className="fa fa-thermometer-full" aria-hidden="true"></i> {max}&deg;C</span>
+                    <span className="px-4"><i className="fa fa-thermometer-quarter" aria-hidden="true"></i> {min}&deg;C</span>
                 </h5>
             );
         }

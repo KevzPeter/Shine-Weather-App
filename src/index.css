@@ -2,7 +2,7 @@ html{text-align: center;}
 body {
   text-align: center;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: -apple-system, BlinkMacSystemFont, 'Muli','Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -22,27 +22,45 @@ code {
   display: block;
   position: relative;
   padding-bottom: 100px;
+  font-family: 'Muli',sans-serif;
 }
-
 .tag{
   background-color: rgba(255,255,255, 0) !important;
+  animation: reveal 1.5s ease-in-out;
+}
+.tag:hover{
+  transform: scale(1.1);
 }
 .col-sm-2{
   padding:20px;
 }
-.svg{
-  animation:mymove 0.8s  infinite ease-in-out alternate ;
+.title{
+  animation: reveal 1.5s ease-in-out;
+  color:white;
+  font-family: 'Pacifico';
 }
-@keyframes mymove {
-  from {transform: scale(1);}
-  to {transform: scale(1.1);}
+@keyframes reveal{
+  from{opacity: 0;}
+  to{opacity: 100;}
+}
+.sun{
+  flex:1;
+  animation:sunspin 10s linear infinite ;
+}
+@keyframes sunspin {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+.dayview{
+  text-align: center;
 }
 .graph{
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 10px;
-  width: 600px;
-  height: 300px;
-  background-color: #fff;
+  padding: 20px;
+  display: inline-block;
+}
+.fa-thermometer-full{
+  color:#D32F2F!important;
+}
+.fa-thermometer-quarter{
+  color:#03A9F4!important;
 }
