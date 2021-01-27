@@ -6,5 +6,9 @@ A simple weather app created using React, Node.js and Openweathermap API
 - 5 day Weather Forecast
 - Responsive design (based on temperature)
 
-#### Live Demo:
+### Quick demo
+
+![](Shine.gif)
+
+#### Live website:
 https://kevz-weather-app.herokuapp.com/
