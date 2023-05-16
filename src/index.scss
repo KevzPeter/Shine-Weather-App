@@ -1,0 +1,128 @@
+html{text-align: center;}
+body {
+  text-align: center;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Muli','Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  ;
+  
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.App{
+  background-image: linear-gradient(to right, #a8ff78,#78ffd6 );
+  min-height: 100vh; 
+  overflow: hidden;
+  display: block;
+  position: relative;
+  padding-bottom: 100px;
+  font-family: 'Muli',sans-serif;
+}
+.daycard{
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background: rgb(9,9,121);
+  animation: reveal 1.5s ease-in-out;
+  padding: 2rem;
+  transition: 0.2s ease-in-out;
+  &:hover{
+    transform: scale(1.05);
+  }
+  .day{
+    font-size: 1.1rem;
+  }
+  .month{
+    font-size: 2.2rem;
+  }
+  .date{
+    font-size: 2.2rem;
+    font-weight: bolder;
+  }
+  .weather-icon-temp{
+    display: flex;
+    gap: 1rem;
+    margin: 1rem;
+  }
+  .high-low{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 0;
+    div{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .description{
+    margin-top: 1rem;
+  }
+  &.card-wi-thunderstorm, &.card-wi-storm-showers{
+    background: linear-gradient(140deg, #76c4f2, #2ecdbb);
+  } 
+  &.card-wi-sleet, &.card-wi-storm-snow{
+    background: linear-gradient(-60deg, #909da4, #adc0be);
+  }
+  &.card-wi-fog, &.card-wi-day-fog{
+    background: linear-gradient(24deg, #f0aec9, #a590ce);
+  } 
+  &.card-wi-day-sunny{
+    background: linear-gradient(-30deg, #ffff75, #ffbc41);
+  } 
+}
+.forecast{
+  display: grid;
+  margin: 2rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2rem;
+}
+.title{
+  animation: reveal 1.5s ease-in-out;
+  color:white;
+  font-family: 'Pacifico';
+}
+@keyframes reveal{
+  from{opacity: 0;}
+  to{opacity: 100;}
+}
+.sun{
+  flex:1;
+  animation:sunspin 10s linear infinite ;
+}
+@keyframes sunspin {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+.dayview{
+  text-align: center;
+}
+.graph{
+  padding: 20px;
+  display: inline-block;
+}
+.fa-thermometer-full{
+  color:#D32F2F!important;
+}
+.fa-thermometer-quarter{
+  color:#03A9F4!important;
+}
+@media screen and (max-width:1000px){
+  .forecast{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media screen and (max-width:768px){
+  .forecast{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width:500px){
+  .forecast{
+    grid-template-columns: 1fr;
+  }
+}

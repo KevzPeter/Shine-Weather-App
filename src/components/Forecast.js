@@ -1,57 +1,67 @@
-import React from 'react';
+import React, { useState, memo } from 'react';
+import weathericon from "../config/weatherIcons.json";
 var moment = require('moment');
 
-export const DayCard = (props) => {
+const DayCard = (props) => {
+
+  let icon = "";
+
   let newDate = new Date();
   const weekday = props.reading.dt * 1000
   newDate.setTime(weekday)
-  var Id="wi-day-fog";
-  const get_WeatherIcon=(rangeId)=> {
+
+  const getWeatherIcon = (rangeId) => {
     switch (true) {
       case rangeId >= 200 && rangeId < 232:
-        Id="wi-thunderstorm"
+        icon = weathericon.Thunderstorm;
         break;
       case rangeId >= 300 && rangeId <= 321:
-        Id="wi-sleet"
+        icon = weathericon.Drizzle;
         break;
       case rangeId >= 500 && rangeId <= 521:
-        Id="wi-storm-showers"
+        icon = weathericon.Rain;
         break;
       case rangeId >= 600 && rangeId <= 622:
-        Id="wi-snow"
+        icon = weathericon.Snow;
         break;
       case rangeId >= 701 && rangeId <= 781:
-        Id="wi-fog"
+        icon = weathericon.Atmosphere;
         break;
       case rangeId === 800:
-        Id="wi-day-sunny"
+        icon = weathericon.Clear;
         break;
       case rangeId >= 801 && rangeId <= 804:
-        Id="wi-day-fog"
+        icon = weathericon.Clouds;
         break;
       default:
-        Id="wi-day-fog"
+        icon = weathericon.Clouds;
     }
   }
-  get_WeatherIcon(props.reading.weather[0].id)
+
+  getWeatherIcon(props.reading.weather[0].id)
+
   return (
-    <div className="col-sm-2 justify-content-center">
-      <div className="tag card text-center" onClick={props.dayview}>
-      <span class="badge badge-warning"><h3 className="card-title">{moment(newDate).format('dddd')}</h3></span>
-        <p className="text-muted">{moment(newDate).format('MMMM Do, h:mm a')}</p>
-        <h6 className="py-4">
-               <i className={`wi ${Id} display-1`}></i>
-           </h6>
-        <h2>{Math.floor(props.reading.main.temp-273.15)}°C</h2>
-        <h5>
-        <span className="px-4">{Math.floor(props.maxtemp-273.15)}&deg;C</span>
-        <span className="px-4">{Math.floor(props.mintemp-273.15)}&deg;C</span>
-        </h5>
-        <div className="card-body">
-        <span class="badge badge-info"><p className="card-text">{props.reading.weather[0].description.toUpperCase()}</p></span>
+    <div className={`daycard card-${icon}`}>
+      <span className="day">{moment(newDate).format('dddd')}</span>
+      <span className="month">{moment(newDate).format('MMMM')}</span>
+      <span className="date">{moment(newDate).format('D')}</span>
+      <span className="weather-icon-temp">
+        <i className={`wi ${icon} display-4`}></i>
+        <h2>{Math.floor(props.reading.main.temp - 273.15)}°C</h2>
+      </span>
+      <div className='high-low'>
+        <div>
+          <span>High</span>
+          <span>{Math.floor(props.maxtemp - 273.15)}&deg;C</span>
+        </div>
+        <div>
+          <span>Low</span>
+          <span>{Math.floor(props.mintemp - 273.15)}&deg;C</span>
         </div>
       </div>
+      <span className='description'>{props.reading.weather[0].description.toUpperCase()}</span>
     </div>
   )
 }
 
+export default memo(DayCard);
