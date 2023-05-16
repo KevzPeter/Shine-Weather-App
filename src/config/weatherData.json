@@ -1,0 +1,47 @@
+{
+  "coord": {
+    "lon": 151.2073,
+    "lat": -33.8679
+  },
+  "weather": [
+    {
+      "id": 520,
+      "main": "Rain",
+      "description": "light intensity shower rain",
+      "icon": "09n"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 287.09,
+    "feels_like": 286.84,
+    "temp_min": 285.79,
+    "temp_max": 287.76,
+    "pressure": 1021,
+    "humidity": 88
+  },
+  "visibility": 9000,
+  "wind": {
+    "speed": 12.86,
+    "deg": 190,
+    "gust": 18.01
+  },
+  "rain": {
+    "1h": 1.43
+  },
+  "clouds": {
+    "all": 75
+  },
+  "dt": 1684246854,
+  "sys": {
+    "type": 2,
+    "id": 2002865,
+    "country": "AU",
+    "sunrise": 1684269675,
+    "sunset": 1684306922
+  },
+  "timezone": 36000,
+  "id": 2147714,
+  "name": "Sydney",
+  "cod": 200
+}
