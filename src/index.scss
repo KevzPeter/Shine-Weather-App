@@ -1,28 +1,17 @@
-html{text-align: center;}
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+html{
+  text-align: center;
+}
 body {
   text-align: center;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Muli','Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  ;
-  
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-.App{
   background-image: linear-gradient(to right, #a8ff78,#78ffd6 );
-  min-height: 100vh; 
-  overflow: hidden;
-  display: block;
-  position: relative;
-  padding-bottom: 100px;
-  font-family: 'Muli',sans-serif;
 }
 .daycard{
   display: flex;
@@ -35,19 +24,15 @@ code {
   &:hover{
     transform: scale(1.05);
   }
-  .day{
-    font-size: 1.1rem;
-  }
-  .month{
-    font-size: 2.2rem;
+  .month, .date{
+    font-size: 2rem;
   }
   .date{
-    font-size: 2.2rem;
     font-weight: bolder;
   }
   .weather-icon-temp{
-    display: flex;
-    gap: 1rem;
+    display: grid;
+    place-items: center;
     margin: 1rem;
   }
   .high-low{
@@ -62,22 +47,28 @@ code {
   .description{
     margin-top: 1rem;
   }
-  &.card-wi-thunderstorm, &.card-wi-storm-showers{
-    background: linear-gradient(140deg, #76c4f2, #2ecdbb);
-  } 
-  &.card-wi-sleet, &.card-wi-storm-snow{
-    background: linear-gradient(-60deg, #909da4, #adc0be);
-  }
-  &.card-wi-fog, &.card-wi-day-fog{
-    background: linear-gradient(24deg, #f0aec9, #a590ce);
-  } 
-  &.card-wi-day-sunny{
-    background: linear-gradient(-30deg, #ffff75, #ffbc41);
-  } 
+}
+.card-wi-thunderstorm, .card-wi-storm-showers{
+  background: linear-gradient(140deg, #76c4f2, #2ecdbb);
+} 
+.card-wi-sleet, .card-wi-storm-snow{
+  background: linear-gradient(-60deg, #909da4, #adc0be);
+}
+.card-wi-fog, .card-wi-day-fog{
+  background: linear-gradient(24deg, #f0aec9, #a590ce);
+} 
+.card-wi-day-sunny{
+  background: linear-gradient(-30deg, #ffff75, #ffbc41);
+} 
+.forecast-container{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 2rem 4rem;
+  gap: 2rem;
 }
 .forecast{
   display: grid;
-  margin: 2rem;
   grid-template-columns: repeat(5, 1fr);
   gap: 2rem;
 }
@@ -105,23 +96,114 @@ code {
   padding: 20px;
   display: inline-block;
 }
-.fa-thermometer-full{
-  color:#D32F2F!important;
+.btn-circle{
+  color: black;
+  text-decoration: none;
+  outline: 0;
+  background-color: white;
+  border: none;
+  border-radius: 99999px;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  &:hover:not([disabled]), &:focus {
+    cursor: pointer;
+    transform: scale(1.05);
+    background-color: #efefef;
+    outline: 0;
+    color: #0070f3;
+  }
+  &:active:not([disabled]) {
+    transform: scale(0.9);
+  }
+  &:disabled, &[disabled] {
+    cursor: not-allowed;
+    background-color: #cccccc;
+    color: #666666;
+  }
 }
-.fa-thermometer-quarter{
-  color:#03A9F4!important;
+.form-container{
+  display: flex;
+  justify-content: center;
+  margin: 2rem 3rem;
+  div{
+    margin-right: 1rem;
+  }
+}
+.summary{
+  background-image: linear-gradient(to top, #159957,#155799 );
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  border-radius: 10px;
+  margin: 4rem;
+  padding: 2rem;
+  .misc{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    gap: 1rem;
+    div{
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+  }
+  .weather-stats{
+    margin: 3rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+  .mountains{
+    height: 300px;
+    img{
+      height: 100%;
+      width: auto;
+    }
+  }
 }
 @media screen and (max-width:1000px){
+  .summary{
+    background-image: linear-gradient(to bottom, #159957,#155799 );
+    flex-direction: column;
+    margin: 2rem 4rem;
+    gap: 0rem;
+    .weather-stats{
+      margin: 3rem 1rem;
+    }
+    .misc{
+      font-size: 1.2rem;
+    }
+    .mountains{
+      display: none;
+    }
+  }
   .forecast{
     grid-template-columns: repeat(3, 1fr);
   }
 }
 @media screen and (max-width:768px){
+  .summary{
+    margin: 2rem 1rem;
+  }
+  .forecast-container{
+    margin: 2rem 1rem;
+  }
   .forecast{
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media screen and (max-width:500px){
+  .form-container{
+    margin: 2rem 1rem;
+  }
   .forecast{
     grid-template-columns: 1fr;
   }

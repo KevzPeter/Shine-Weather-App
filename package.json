@@ -4,19 +4,13 @@
   "homepage": ".",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "bootstrap": "^4.4.1",
-    "mdbreact": "^5.2.0",
+    "bootstrap": "^5.2.3",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^5.0.1",
     "recharts": "^2.6.2",
-    "sass": "^1.62.1",
-    "serve": "^14.2.0",
-    "weather-icons": "git+https://github.com/erikflowers/weather-icons.git"
+    "sass": "^1.62.1"
   },
   "scripts": {
     "dev": "react-scripts start",
